@@ -258,9 +258,9 @@ void LFGMgr::LoadLFGDungeons(bool reload /* = false */)
     {
         CachedDungeonMapStore.clear();
         // Recalculate locked dungeons
-        for (LfgPlayerDataContainer::const_iterator it = PlayersStore.begin(); it != PlayersStore.end(); ++it)
+        /*for (LfgPlayerDataContainer::const_iterator it = PlayersStore.begin(); it != PlayersStore.end(); ++it)
             if (Player* player = ObjectAccessor::FindPlayer(it->first))
-                InitializeLockedDungeons(player);
+                InitializeLockedDungeons(player);*/
     }
 }
 

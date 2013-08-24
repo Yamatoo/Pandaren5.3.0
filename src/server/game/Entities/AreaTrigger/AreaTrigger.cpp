@@ -77,9 +77,9 @@ bool AreaTrigger::CreateAreaTrigger(uint32 guidlow, uint32 triggerEntry, Unit* c
     SetUInt32Value(AREATRIGGER_SPELLID, spell->Id);
     SetUInt32Value(AREATRIGGER_SPELLVISUALID, spell->SpellVisual[0]);
     SetUInt32Value(AREATRIGGER_DURATION, spell->GetDuration());
-    SetFloatValue(AREATRIGGER_FINAL_POS + 0, pos.GetPositionX());
-    SetFloatValue(AREATRIGGER_FINAL_POS + 1, pos.GetPositionY());
-    SetFloatValue(AREATRIGGER_FINAL_POS + 2, pos.GetPositionZ());
+    //SetFloatValue(AREATRIGGER_FINAL_POS + 0, pos.GetPositionX());
+    //SetFloatValue(AREATRIGGER_FINAL_POS + 1, pos.GetPositionY());
+    //SetFloatValue(AREATRIGGER_FINAL_POS + 2, pos.GetPositionZ());
 
     if (!GetMap()->AddToMap(this))
         return false;

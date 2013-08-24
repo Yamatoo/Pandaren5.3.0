@@ -2111,7 +2111,7 @@ void GameObject::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player* t
         {
             updateMask.SetBit(index);
 
-            if (index == GAMEOBJECT_DYNAMIC)
+            if (index == OBJECT_DYNAMIC_FLAGS)
             {
                 uint16 dynFlags = 0;
                 switch (GetGoType())

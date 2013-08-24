@@ -41,7 +41,7 @@ void LFGPlayerScript::OnLevelChanged(Player* player, uint8 /*oldLevel*/)
     if (!sLFGMgr->isOptionEnabled(LFG_OPTION_ENABLE_DUNGEON_FINDER | LFG_OPTION_ENABLE_RAID_BROWSER))
         return;
 
-    sLFGMgr->InitializeLockedDungeons(player);
+    //sLFGMgr->InitializeLockedDungeons(player);
 }
 
 void LFGPlayerScript::OnLogout(Player* player)
@@ -76,16 +76,16 @@ void LFGPlayerScript::OnLogin(Player* player)
         }
     }
 
-    sLFGMgr->InitializeLockedDungeons(player);
+    //sLFGMgr->InitializeLockedDungeons(player);
     sLFGMgr->SetTeam(player->GetGUID(), player->GetTeam());
     /// @todo - Restore LfgPlayerData and send proper status to player if it was in a group
 }
 
 void LFGPlayerScript::OnBindToInstance(Player* player, Difficulty difficulty, uint32 mapId, bool /*permanent*/)
 {
-    MapEntry const* mapEntry = sMapStore.LookupEntry(mapId);
+    /*MapEntry const* mapEntry = sMapStore.LookupEntry(mapId);
     if (mapEntry->IsDungeon() && difficulty > DUNGEON_DIFFICULTY_NORMAL)
-        sLFGMgr->InitializeLockedDungeons(player);
+        sLFGMgr->InitializeLockedDungeons(player);*/
 }
 
 void LFGPlayerScript::OnMapChanged(Player* player)

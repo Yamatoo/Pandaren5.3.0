@@ -26,7 +26,7 @@ uint32 ItemUpdateFieldFlags[CONTAINER_END] =
     UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_TYPE
     UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_ENTRY
     UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_SCALE_X
-    UF_FLAG_NONE,                                           // OBJECT_FIELD_PADDING
+
     UF_FLAG_PUBLIC,                                         // ITEM_FIELD_OWNER
     UF_FLAG_PUBLIC,                                         // ITEM_FIELD_OWNER+1
     UF_FLAG_PUBLIC,                                         // ITEM_FIELD_CONTAINED
@@ -82,19 +82,14 @@ uint32 ItemUpdateFieldFlags[CONTAINER_END] =
     UF_FLAG_PUBLIC,                                         // ITEM_FIELD_ENCHANTMENT_13_1
     UF_FLAG_PUBLIC,                                         // ITEM_FIELD_ENCHANTMENT_13_1+1
     UF_FLAG_PUBLIC,                                         // ITEM_FIELD_ENCHANTMENT_13_3
-    UF_FLAG_PUBLIC,                                         // ITEM_FIELD_ENCHANTMENT_14_1
-    UF_FLAG_PUBLIC,                                         // ITEM_FIELD_ENCHANTMENT_14_1+1
-    UF_FLAG_PUBLIC,                                         // ITEM_FIELD_ENCHANTMENT_14_3
-    UF_FLAG_PUBLIC,                                         // ITEM_FIELD_ENCHANTMENT_15_1
-    UF_FLAG_PUBLIC,                                         // ITEM_FIELD_ENCHANTMENT_15_1+1
-    UF_FLAG_PUBLIC,                                         // ITEM_FIELD_ENCHANTMENT_15_3
     UF_FLAG_PUBLIC,                                         // ITEM_FIELD_PROPERTY_SEED
     UF_FLAG_PUBLIC,                                         // ITEM_FIELD_RANDOM_PROPERTIES_ID
     UF_FLAG_OWNER | UF_FLAG_ITEM_OWNER,                     // ITEM_FIELD_DURABILITY
     UF_FLAG_OWNER | UF_FLAG_ITEM_OWNER,                     // ITEM_FIELD_MAXDURABILITY
     UF_FLAG_PUBLIC,                                         // ITEM_FIELD_CREATE_PLAYED_TIME
+	UF_FLAG_PUBLIC,											// ITEM_FIELD_MOD_MASK
+	
     UF_FLAG_PUBLIC,                                         // CONTAINER_FIELD_NUM_SLOTS
-    UF_FLAG_NONE,                                           // CONTAINER_ALIGN_PAD
     UF_FLAG_PUBLIC,                                         // CONTAINER_FIELD_SLOT_1
     UF_FLAG_PUBLIC,                                         // CONTAINER_FIELD_SLOT_1+1
     UF_FLAG_PUBLIC,                                         // CONTAINER_FIELD_SLOT_1+2
@@ -220,6 +215,7 @@ uint32 UnitUpdateFieldFlags[PLAYER_END] =
     UF_FLAG_PRIVATE | UF_FLAG_OWNER | UF_FLAG_UNUSED2,      // UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER+3
     UF_FLAG_PRIVATE | UF_FLAG_OWNER | UF_FLAG_UNUSED2,      // UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER+4
     UF_FLAG_PUBLIC,                                         // UNIT_FIELD_LEVEL
+    UF_FLAG_PUBLIC,                                         // UNIT_FIELD_EFFECTIVE_LEVEL
     UF_FLAG_PUBLIC,                                         // UNIT_FIELD_FACTIONTEMPLATE
     UF_FLAG_PUBLIC,                                         // UNIT_VIRTUAL_ITEM_SLOT_ID
     UF_FLAG_PUBLIC,                                         // UNIT_VIRTUAL_ITEM_SLOT_ID+1
@@ -244,7 +240,7 @@ uint32 UnitUpdateFieldFlags[PLAYER_END] =
     UF_FLAG_PUBLIC,                                         // UNIT_FIELD_PET_NAME_TIMESTAMP
     UF_FLAG_OWNER,                                          // UNIT_FIELD_PETEXPERIENCE
     UF_FLAG_OWNER,                                          // UNIT_FIELD_PETNEXTLEVELEXP
-    UF_FLAG_DYNAMIC,                                        // UNIT_DYNAMIC_FLAGS
+    UF_FLAG_DYNAMIC,                                        // OBJECT_DYNAMIC_FLAGS
     UF_FLAG_PUBLIC,                                         // UNIT_MOD_CAST_SPEED
     UF_FLAG_PUBLIC,                                         // UNIT_MOD_CAST_HASTE
     UF_FLAG_PUBLIC,                                         // UNIT_CREATED_BY_SPELL
@@ -1192,6 +1188,8 @@ uint32 UnitUpdateFieldFlags[PLAYER_END] =
     UF_FLAG_PRIVATE,                                        // PLAYER_TRACK_RESOURCES
     UF_FLAG_PRIVATE,                                        // PLAYER_EXPERTISE
     UF_FLAG_PRIVATE,                                        // PLAYER_OFFHAND_EXPERTISE
+    UF_FLAG_PRIVATE,                                        // PLAYER_RANGED_EXPERTISE
+    UF_FLAG_PRIVATE,                                        // PLAYER_COMBAT_RATING_EXPERTISE
     UF_FLAG_PRIVATE,                                        // PLAYER_BLOCK_PERCENTAGE
     UF_FLAG_PRIVATE,                                        // PLAYER_DODGE_PERCENTAGE
     UF_FLAG_PRIVATE,                                        // PLAYER_PARRY_PERCENTAGE
@@ -1555,18 +1553,16 @@ uint32 UnitUpdateFieldFlags[PLAYER_END] =
     UF_FLAG_PRIVATE,                                        // PLAYER_FIELD_MOD_RANGED_HASTE
     UF_FLAG_PRIVATE,                                        // PLAYER_FIELD_MOD_PET_HASTE
     UF_FLAG_PRIVATE,                                        // PLAYER_FIELD_MOD_HASTE_REGEN
+    UF_FLAG_PRIVATE,                                        // PLAYER_FIELD_SUMMONED_BATTLE_PET_GUID
+    UF_FLAG_PRIVATE,                                        // PLAYER_FIELD_OVERRIDE_SPELLS_ID
+    UF_FLAG_PRIVATE,                                        // PLAYER_FIELD_LFG_BONUS_FACTION_ID
+    UF_FLAG_PRIVATE,                                        // PLAYER_FIELD_LOOT_SPEC_ID
+    UF_FLAG_PRIVATE,                                        // PLAYER_FIELD_OVERRIDE_ZONE_PVP_TYPE
+    UF_FLAG_PRIVATE,                                        // PLAYER_FIELD_ITEM_LEVEL_DELTA
 };
 
 uint32 GameObjectUpdateFieldFlags[GAMEOBJECT_END] =
 {
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_GUID
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_GUID+1
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_DATA
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_DATA+1
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_TYPE
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_ENTRY
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_SCALE_X
-    UF_FLAG_NONE,                                           // OBJECT_FIELD_PADDING
     UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_CREATED_BY
     UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_CREATED_BY+1
     UF_FLAG_PUBLIC,                                         // GAMEOBJECT_DISPLAYID
@@ -1575,22 +1571,14 @@ uint32 GameObjectUpdateFieldFlags[GAMEOBJECT_END] =
     UF_FLAG_PUBLIC,                                         // GAMEOBJECT_PARENTROTATION+1
     UF_FLAG_PUBLIC,                                         // GAMEOBJECT_PARENTROTATION+2
     UF_FLAG_PUBLIC,                                         // GAMEOBJECT_PARENTROTATION+3
-    UF_FLAG_DYNAMIC,                                        // GAMEOBJECT_DYNAMIC
     UF_FLAG_PUBLIC,                                         // GAMEOBJECT_FACTION
     UF_FLAG_PUBLIC,                                         // GAMEOBJECT_LEVEL
     UF_FLAG_PUBLIC,                                         // GAMEOBJECT_BYTES_1
+    UF_FLAG_PUBLIC,                                         // GAMEOBJECT_STATE_SPELL_VISUAL_ID
 };
 
 uint32 DynamicObjectUpdateFieldFlags[DYNAMICOBJECT_END] =
 {
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_GUID
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_GUID+1
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_DATA
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_DATA+1
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_TYPE
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_ENTRY
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_SCALE_X
-    UF_FLAG_NONE,                                           // OBJECT_FIELD_PADDING
     UF_FLAG_PUBLIC,                                         // DYNAMICOBJECT_CASTER
     UF_FLAG_PUBLIC,                                         // DYNAMICOBJECT_CASTER+1
     UF_FLAG_DYNAMIC,                                        // DYNAMICOBJECT_BYTES
@@ -1643,16 +1631,7 @@ uint32 AreaTriggerUpdateFieldFlags[AREATRIGGER_END] =
 {
     UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_GUID
     UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_GUID+1
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_DATA
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_DATA+1
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_TYPE
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_ENTRY
-    UF_FLAG_PUBLIC,                                         // OBJECT_FIELD_SCALE_X
-    UF_FLAG_NONE,                                           // OBJECT_FIELD_PADDING
     UF_FLAG_PUBLIC,                                         // AREATRIGGER_SPELLID
     UF_FLAG_PUBLIC,                                         // AREATRIGGER_SPELLVISUALID
     UF_FLAG_PUBLIC,                                         // AREATRIGGER_DURATION
-    UF_FLAG_PUBLIC,                                         // AREATRIGGER_FINAL_POS
-    UF_FLAG_PUBLIC,                                         // AREATRIGGER_FINAL_POS+1
-    UF_FLAG_PUBLIC,                                         // AREATRIGGER_FINAL_POS+2
 };

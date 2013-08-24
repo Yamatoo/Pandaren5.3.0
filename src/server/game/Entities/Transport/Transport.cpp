@@ -220,7 +220,7 @@ bool Transport::Create(uint32 guidlow, uint32 entry, uint32 mapid, float x, floa
 
     SetGoAnimProgress(animprogress);
     if (dynflags)
-        SetUInt32Value(GAMEOBJECT_DYNAMIC, MAKE_PAIR32(0, dynflags));
+        SetUInt32Value(OBJECT_DYNAMIC_FLAGS, MAKE_PAIR32(0, dynflags));
 
     SetName(goinfo->name);
 

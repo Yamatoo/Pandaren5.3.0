@@ -302,10 +302,29 @@ void Object::DestroyForPlayer(Player* target, bool onDeath) const
     }
 
     WorldPacket data(SMSG_DESTROY_OBJECT, 8 + 1);
-    data << uint64(GetGUID());
+    ObjectGuid guid;
+
+    data.WriteBit(guid[4]);
     //! If the following bool is true, the client will call "void CGUnit_C::OnDeath()" for this object.
     //! OnDeath() does for eg trigger death animation and interrupts certain spells/missiles/auras/sounds...
-    data << uint8(onDeath ? 1 : 0);
+    data.WriteBit(onDeath);
+ 	data.WriteBit(guid[0]);
+ 	data.WriteBit(guid[1]);
+ 	data.WriteBit(guid[6]);
+ 	data.WriteBit(guid[2]);
+ 	data.WriteBit(guid[5]);
+ 	data.WriteBit(guid[7]);
+ 	data.WriteBit(guid[3]);
+
+    data.WriteByteSeq(guid[7]);
+ 	data.WriteByteSeq(guid[1]);
+ 	data.WriteByteSeq(guid[2]);
+ 	data.WriteByteSeq(guid[5]);
+ 	data.WriteByteSeq(guid[0]);
+ 	data.WriteByteSeq(guid[3]);
+ 	data.WriteByteSeq(guid[6]);
+ 	data.WriteByteSeq(guid[4]);
+
     target->GetSession()->SendPacket(&data);
 }
 
@@ -352,6 +371,7 @@ void Object::BuildMovementUpdate(ByteBuffer* data, uint16 flags) const //5.3.0
     Unit const* self = NULL;
     ObjectGuid guid = GetGUID();
     ObjectGuid guid1 = GetGUID();
+    ObjectGuid guid8 = GetGUID();
     uint32 movementFlags = 0;
     uint16 movementFlagsExtra = 0;
 
@@ -365,8 +385,8 @@ void Object::BuildMovementUpdate(ByteBuffer* data, uint16 flags) const //5.3.0
 
     uint32 unkLoopCounter = 0;
     // Bit content
-    /*
-    data->WriteBit(0);
+    
+    data->WriteBit(0); //bit28D
     data->WriteBits(unkLoopCounter, 22); //404
     data->WriteBit(flags & UPDATEFLAG_VEHICLE);
     data->WriteBit(0); //bit3F0
@@ -451,17 +471,28 @@ void Object::BuildMovementUpdate(ByteBuffer* data, uint16 flags) const //5.3.0
         data->WriteBit(1); //bit70
         data->WriteBit(guid1[6]);
         data->WriteBits(0, 19);
-        //bits168A = new uint[bits168];
-                //for (var i = 0; i < bits168; ++i)
-                    //bits168A[i] = packet.ReadBits("bits168", 2, index);
+        //for (uint32 i = 0; i < bits168; ++i)
+            //data->WriteBits(0, 2);
+
         data->WriteBit(guid1[1]);
 
-        if (self->IsSplineEnabled())
-            Movement::PacketBuilder::WriteCreateBits(*self->movespline, *data);
+        // if (bitD8)
+        //data->WriteBit(0); //bitF0
+        //data->WriteBit(0); //bit118
+        //data->WriteBit(0); //bit134
+        //data->WriteBits(0, 2); //bit130
+        //data->WriteBits(0, 20); //bit120
+        //data->WriteBit(0); //bit110
+            // if (bit134)
+        //data->WriteBits(0, 21); //bits138
+        //data->WriteBits(0, 2); // bits148
+
+        //if (self->IsSplineEnabled())
+            //Movement::PacketBuilder::WriteCreateBits(*self->movespline, *data);
 
         data->WriteBit(1); //bitA8
         data->WriteBit(guid1[3]);
-        data->WriteBits(0, 22);
+        data->WriteBits(0, 22); //bits98
 
         if (movementFlagsExtra)
             data->WriteBits(movementFlagsExtra, 13);
@@ -510,40 +541,254 @@ void Object::BuildMovementUpdate(ByteBuffer* data, uint16 flags) const //5.3.0
         data->WriteBit(victimGuid[2]);
     }
 
+    //if (bit208)
+    //data->WriteBit(0); //bit21A
+    //data->WriteBit(0); //bit228
+    //data->WriteBit(0); //bit270
+    //data->WriteBit(0); //bit219
+    //data->WriteBit(0); //bit218
+    //data->WriteBit(0); //bit21C
+    //data->WriteBit(0); //bit244
+
+        //if (bit244)
+    //data->WriteBits(0, 21); //bits248
+    //data->WriteBits(0, 21); //bits258
+
+                //if (bit270)
+    //data->WriteBits(0, 20); //bits274
+    //data->WriteBit(0); // bit21B
+
+    // if (bit3F0)
+    //data->WriteBits(0, 22); //bits3F4
+    // if (bit28E)
+    //data->WriteBits(0, 7); //bits28F
+
     data->FlushBits();
 
-
-    /*if (bit208)
-            {
-                packet.ReadBit("bit21A", index);
-                bit228 = packet.ReadBit();
-                bit270 = packet.ReadBit();
-                packet.ReadBit("bit219", index);
-                packet.ReadBit("bit218", index);
-                bit21C = packet.ReadBit();
-                bit244 = packet.ReadBit();
-
-                if (bit244)
-                {
-                    bits248 = packet.ReadBits(21);
-                    bits258 = packet.ReadBits(21);
-                }
-
-                if (bit270)
-                    bits274 = packet.ReadBits(20);
-
-                packet.ReadBit("bit21B", index);
-            }*/
-
-    /*for (uint32 i = 0; i < unkLoopCounter; ++i)
+    for (uint32 i = 0; i < unkLoopCounter; ++i)
         *data << uint32(0); //int408
 
     if (flags & UPDATEFLAG_LIVING)
     {
+        //*data << uint32(0); // bit20 if
 
+        /*for (uint32 i = 0; i < bits168; ++i)
+        {
+            *data << float(0.0f); //Float16C+5
+            *data << uint32(0); //Int16C+4
+            *data << float(0.0f); //Float16C+1
+            *data << uint32(0); //Int16C+0
+            *data << float(0.0f); //Float16C+2
+            *data << float(0.0f); //Float16C+3
+        }*/
+        //if (bitD8)
+        /**data << uint32(0); // Int11C
+        *data << float(0.0f); // float108
+        *data << float(0.0f); // float114
+        *data << uint32(0); // spline time??
+
+        *data << float(0.0f); //float13C+1
+        *data << float(0.0f); //float13C+0
+
+        *data << float(0.0f); //float10C
+        *data << uint8(0); // ByteFC
+
+        *data << float(0.0f); // facing angle
+        *data << uint32(0); // int104
+
+        *data << float(self->GetPositionY());
+        *data << float(self->GetPositionZMinusOffset());
+        *data << uint32(0); //time
+        *data << float(self->GetPositionX());*/
+
+        if (self->m_movementInfo.transport.guid)
+        {
+            ObjectGuid transGuid = self->m_movementInfo.transport.guid;
+
+            data->WriteByteSeq(transGuid[4]);
+            *data << float(self->GetTransOffsetZ());
+            *data << float(self->GetTransOffsetY());
+            *data << uint32(self->GetTransTime());
+            *data << int8(self->GetTransSeat());
+            data->WriteByteSeq(transGuid[3]);
+            data->WriteByteSeq(transGuid[1]);
+            data->WriteByteSeq(transGuid[6]);
+            if (hasTransportTime2)
+                *data << uint32(self->m_movementInfo.transport.time2);
+            data->WriteByteSeq(transGuid[5]);
+            *data << float(self->GetTransOffsetO());
+            *data << float(self->GetTransOffsetX());
+            data->WriteByteSeq(transGuid[2]);
+            data->WriteByteSeq(transGuid[0]);
+            data->WriteByteSeq(transGuid[7]);
+            if (hasTransportTime3)
+                *data << uint32(self->m_movementInfo.transport.time3);
+        }
+        data->WriteByteSeq(guid1[2]);
+        data->WriteByteSeq(guid1[1]);
+        *data << self->GetSpeed(MOVE_WALK);
+        *data << self->GetSpeed(MOVE_TURN_RATE);
+        data->WriteByteSeq(guid1[0]);
+        data->WriteByteSeq(guid1[3]);
+        *data << self->GetSpeed(MOVE_FLIGHT);
+
+        if (hasFallData)
+        {
+            if (hasFallDirection)
+            {
+                *data << float(self->m_movementInfo.jump.cosAngle); //float88
+                *data << float(self->m_movementInfo.jump.xyspeed); // float8C
+                *data << float(self->m_movementInfo.jump.sinAngle); // float84
+            }
+
+            *data << float(self->m_movementInfo.jump.zspeed);
+            *data << uint32(self->m_movementInfo.jump.fallTime);        
+        }
+        *data << self->GetSpeed(MOVE_FLIGHT_BACK);
+        data->WriteByteSeq(guid1[5]);
+        *data << float(self->GetPositionZ());
+        //if (!G3D::fuzzyEq(self->GetOrientation(), 0.0f))
+            //*data << float(self->GetOrientation());
+        data->WriteByteSeq(guid1[6]);
+        //*data << float(0.0f); //float90
+        *data << float(0.0f); //pitch speed
+        //*data << float(0.0f); //float70
+        //*data << uint32(0); // int9c
+        *data << self->GetSpeed(MOVE_SWIM_BACK);
+        //*data << uint32(0); // intA8
+        *data << float(self->GetPositionY());
+        *data << self->GetSpeed(MOVE_SWIM);
+        *data << self->GetSpeed(MOVE_RUN_BACK);
+        data->WriteByteSeq(guid1[7]);
+        *data << self->GetSpeed(MOVE_RUN);
+        *data << float(self->GetPositionX());
+        data->WriteByteSeq(guid1[4]);
+    }
+
+    /*if (bit310)
+    {
+        packet.WriteLine("Missing data for bit310", index);
     }*/
-    ////////
-    data->WriteBit(0);
+
+    if (flags & UPDATEFLAG_GO_TRANSPORT_POSITION)
+    {
+        WorldObject const* self = static_cast<WorldObject const*>(this);
+        ObjectGuid transGuid = self->m_movementInfo.transport.guid;
+
+        *data << uint32(self->GetTransTime());
+        data->WriteByteSeq(transGuid[7]);
+        *data << float(self->GetTransOffsetY());
+        data->WriteByteSeq(transGuid[0]);
+        if (hasTransportTime3)
+            *data << uint32(self->m_movementInfo.transport.time3);
+        data->WriteByteSeq(transGuid[3]);
+        *data << int8(self->GetTransSeat());
+        data->WriteByteSeq(transGuid[1]);
+        *data << float(self->GetTransOffsetZ());
+        *data << float(self->GetTransOffsetO());
+        if (hasTransportTime2)
+            *data << uint32(self->m_movementInfo.transport.time2);
+        *data << float(self->GetTransOffsetX());
+        data->WriteByteSeq(transGuid[2]);
+        data->WriteByteSeq(transGuid[4]);
+        data->WriteByteSeq(transGuid[5]);
+        data->WriteByteSeq(transGuid[6]);
+    }
+    //if (bit208)
+    /**data << float(0.0f); // float224
+    *data << float(0.0f); // float220
+    *data << float(0.0f); // float210
+
+    *data << float(0.0f); // Float25C+1
+    *data << float(0.0f); // Float25C+0
+    *data << float(0.0f); // Float24C+0
+    *data << float(0.0f); // Float24C+1
+    *data << float(0.0f); // Float26C
+    *data << float(0.0f); // Float268
+
+    *data << float(0.0f); // Float22C
+    *data << float(0.0f); // Float230
+    *data << float(0.0f); // Float23C
+    *data << float(0.0f); // Float234
+    *data << float(0.0f); // Float238
+    *data << float(0.0f); // Float240
+    *data << float(0.0f); // Float277+1
+    *data << float(0.0f); // Float277+0
+    *data << float(0.0f); // Float277+2
+    *data << float(0.0f); // Float214
+    *data << uint32(0); // int20c
+    */
+
+    if (flags & UPDATEFLAG_VEHICLE)
+    {
+        *data << float(self->GetOrientation());
+        *data << uint32(self->GetVehicleKit()->GetVehicleInfo()->m_ID);
+    }
+
+    if (flags & UPDATEFLAG_HAS_TARGET)
+    {
+        ObjectGuid victimGuid = self->GetVictim()->GetGUID();   // checked in BuildCreateUpdateBlockForPlayer
+        data->WriteByteSeq(victimGuid[7]);
+        data->WriteByteSeq(victimGuid[1]);
+        data->WriteByteSeq(victimGuid[4]);
+        data->WriteByteSeq(victimGuid[6]);
+        data->WriteByteSeq(victimGuid[0]);
+        data->WriteByteSeq(victimGuid[2]);
+        data->WriteByteSeq(victimGuid[5]);
+        data->WriteByteSeq(victimGuid[3]);
+
+    }
+
+    //*data << uint64(0);
+
+    if (flags & UPDATEFLAG_ANIMKITS)
+    {
+        //*data << uint16(0);
+        //*data << uint16(0);
+        //*data << uint16(0);
+    }
+
+    //*data << uint8(0); //bits28F
+
+    if (flags & UPDATEFLAG_STATIONARY_POSITION)
+    {
+        WorldObject const* self = static_cast<WorldObject const*>(this);       
+        *data << float(self->GetPositionX());
+        if (Unit const* unit = ToUnit())
+            *data << float(unit->GetPositionZMinusOffset());
+        else
+            *data << float(self->GetPositionZ());
+        *data << float(self->GetOrientation());
+        *data << float(self->GetPositionY());
+    }
+
+    //if (bit1D8)
+    //*data << uint32(0); // Int1DC
+    //*data << uint32(0); // for Int1DC
+
+    //if (bit3F0)
+    //*data << uint32(0); // Int288
+    //*data << uint32(0); // Int3EC
+
+    /*data->WriteBit(guid8[2]);
+    data->WriteBit(guid8[4]);
+    data->WriteBit(guid8[6]);
+    data->WriteBit(guid8[3]);
+    data->WriteBit(guid8[1]);
+    data->WriteBit(guid8[5]);
+    data->WriteBit(guid8[6]);
+    data->WriteBit(guid8[0]);
+
+    data->WriteByteSeq(guid8[1]);
+    data->WriteByteSeq(guid8[3]);
+    data->WriteByteSeq(guid8[6]);
+    data->WriteByteSeq(guid8[7]);
+    data->WriteByteSeq(guid8[2]);
+    data->WriteByteSeq(guid8[4]);
+    data->WriteByteSeq(guid8[5]);
+    data->WriteByteSeq(guid8[0]);*/
+
+    /*data->WriteBit(0);
     data->WriteBit(0);
     data->WriteBit(flags & UPDATEFLAG_ROTATION);
     data->WriteBit(flags & UPDATEFLAG_ANIMKITS);
@@ -854,6 +1099,7 @@ void Object::BuildMovementUpdate(ByteBuffer* data, uint16 flags) const //5.3.0
 
     if (flags & UPDATEFLAG_TRANSPORT)
         *data << uint32(getMSTime());                       // Unknown - getMSTime is wrong.
+        */
 }
 
 void Object::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player* target) const
@@ -881,6 +1127,7 @@ void Object::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player* targe
     *data << uint8(updateMask.GetBlockCount());
     updateMask.AppendToPacket(data);
     data->append(fieldBuffer);
+    *data << uint8(0);
 }
 
 void Object::ClearUpdateMask(bool remove)
@@ -932,7 +1179,7 @@ uint32 Object::GetUpdateFieldData(Player const* target, uint32*& flags) const
             if (ToUnit()->GetOwnerGUID() == target->GetGUID())
                 visibleFlag |= UF_FLAG_OWNER;
 
-            if (HasFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_SPECIALINFO))
+            if (HasFlag(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_SPECIALINFO))
                 if (ToUnit()->HasAuraTypeWithCaster(SPELL_AURA_EMPATHY, target->GetGUID()))
                     visibleFlag |= UF_FLAG_SPECIAL_INFO;
 

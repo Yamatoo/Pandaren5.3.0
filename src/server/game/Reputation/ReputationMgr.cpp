@@ -210,13 +210,13 @@ void ReputationMgr::SendInitialReputations()
         // fill in absent fields
         for (; a != itr->first; ++a)
         {
-            data << uint8(0);
             data << uint32(0);
+            data << uint8(0);
         }
 
         // fill in encountered data
-        data << uint8(itr->second.Flags);
         data << uint32(itr->second.Standing);
+        data << uint8(itr->second.Flags);
 
         itr->second.needSend = false;
 
